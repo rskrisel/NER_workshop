@@ -78,7 +78,6 @@ We will import:
 import spacy
 from spacy import displacy
 import en_core_web_sm
-from collections import Counter
 import pandas as pd
 pd.options.display.max_rows = 600
 pd.options.display.max_colwidth = 400
