@@ -111,7 +111,7 @@ In this workshop, we are going to collect data from news articles in two ways. F
 
 
 ```python
-secret= '571e874fe6674690a5ea658e5937d47c'
+secret= '123456789'
 ```
 
 ### Define your endpoint
