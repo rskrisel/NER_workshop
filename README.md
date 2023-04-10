@@ -78,6 +78,7 @@ We will import:
 import spacy
 from spacy import displacy
 import en_core_web_sm
+from collections import Counter
 import pandas as pd
 pd.options.display.max_rows = 600
 pd.options.display.max_colwidth = 400
@@ -110,7 +111,7 @@ In this workshop, we are going to collect data from news articles in two ways. F
 
 
 ```python
-secret= '123456789'
+secret= '571e874fe6674690a5ea658e5937d47c'
 ```
 
 ### Define your endpoint
@@ -125,7 +126,8 @@ url = 'https://newsapi.org/v2/everything?'
 
 ```python
 parameters = {
-    'q': 'CHIPS Act', 
+    'q': 'Ukraine',
+    'searchIn':'title',
     'pageSize': 20, 
     'language' : 'en',
     'apiKey': secret 
@@ -244,30 +246,30 @@ articles
 
 
 ```python
-filepath = "files/3.txt"
+filepath = "files/1.txt"
 text = open(filepath, encoding='utf-8').read()
-document = nlp(text)
+doc = nlp(text)
 ```
 
 ### Let's use displacy to visualize our results
 
 
 ```python
-displacy.render(document, style="ent")
+displacy.render(doc, style="ent")
 ```
 
 ### Let's see a list of the identified entities
 
 
 ```python
-document.ents
+doc.ents
 ```
 
 ### Let's add the entity label next to each entity: 
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     print(named_entity, named_entity.label_)
 ```
 
@@ -275,7 +277,7 @@ for named_entity in document.ents:
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     if named_entity.label_ == "PERSON":
         print(named_entity)
 ```
@@ -284,7 +286,7 @@ for named_entity in document.ents:
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     if named_entity.label_ == "NORP":
         print(named_entity)
 ```
@@ -293,7 +295,7 @@ for named_entity in document.ents:
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     if named_entity.label_ == "GPE":
         print(named_entity)
 ```
@@ -302,7 +304,7 @@ for named_entity in document.ents:
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     if named_entity.label_ == "LOC":
         print(named_entity)
 ```
@@ -311,7 +313,7 @@ for named_entity in document.ents:
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     if named_entity.label_ == "FAC":
         print(named_entity)
 ```
@@ -320,12 +322,27 @@ for named_entity in document.ents:
 
 
 ```python
-for named_entity in document.ents:
+for named_entity in doc.ents:
     if named_entity.label_ == "ORG":
         print(named_entity)
 ```
 
-### Now, let's define a function that will run this process across our entire collection of texts:
+### Let's define a function that will entify all the entities in our document and save the output as a dictionary:
+
+
+```python
+entities=[]
+entity_type = [] 
+entity_identified = []
+for named_entity in doc.ents:
+    entity_type.append(named_entity.label_)
+    entity_identified.append(named_entity.text)
+    entity_dict = {'Entity_type': entity_type, 'Entity_identified': entity_identified}
+    entities.append(entity_dict)
+print(entities)
+```
+
+### Let's build on this function to run this process across our entire collection of texts:
 
 
 ```python
@@ -384,5 +401,3 @@ df_NER[df_NER['Entity_type'] == 'MONEY'][:15]
 ```
 
 
-
-```
